@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>單字特訓班 (含即時錯題複習)</title>
+    <title>單字特訓班 (可選題數版)</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -14,8 +14,6 @@
         body { font-family: 'Roboto', 'Noto Sans TC', sans-serif; }
         .fade-in { animation: fadeIn 0.3s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        /* 簡單的 Modal 動畫 */
         .modal-enter { opacity: 0; transform: scale(0.95); }
         .modal-enter-active { opacity: 1; transform: scale(1); transition: opacity 200ms, transform 200ms; }
     </style>
@@ -282,7 +280,7 @@ const MistakesModal = ({ mistakes, onClose, onSpeak }) => {
 };
 
 const App = () => {
-    const [gameState, setGameState] = React.useState('start'); // start, quiz, summary
+    const [gameState, setGameState] = React.useState('start'); 
     const [quizQueue, setQuizQueue] = React.useState([]);
     const [currentIndex, setCurrentIndex] = React.useState(0);
     const [score, setScore] = React.useState(0);
@@ -292,18 +290,37 @@ const App = () => {
     const [userChoice, setUserChoice] = React.useState(null);
     const [isPlaying, setIsPlaying] = React.useState(false);
     const [showMistakes, setShowMistakes] = React.useState(false);
+    const [copyStatus, setCopyStatus] = React.useState(false);
+    
+    // 新增：目標題數狀態 (預設 20 題)
+    const [targetCount, setTargetCount] = React.useState(20);
 
-    const startQuiz = (sourceList = uniqueData) => {
-        const shuffled = shuffleArray(sourceList);
-        setQuizQueue(shuffled);
+    const startQuiz = (specificList = null) => {
+        let finalQueue = [];
+        
+        if (specificList) {
+            // 如果有指定列表（例如：複習錯題），就直接使用該列表，不進行切片
+            finalQueue = shuffleArray(specificList);
+        } else {
+            // 如果是全新開始，則從總題庫中抽取指定數量
+            const shuffled = shuffleArray(uniqueData);
+            if (targetCount === 'all') {
+                finalQueue = shuffled;
+            } else {
+                finalQueue = shuffled.slice(0, parseInt(targetCount));
+            }
+        }
+
+        setQuizQueue(finalQueue);
         setCurrentIndex(0);
         setScore(0);
         setWrongAnswers([]);
         setGameState('quiz');
-        generateOptions(shuffled[0], uniqueData);
+        generateOptions(finalQueue[0], uniqueData);
         setSelectedOption(null);
         setUserChoice(null);
         setShowMistakes(false);
+        setCopyStatus(false);
     };
 
     const generateOptions = (currentWord, fullList) => {
@@ -345,13 +362,11 @@ const App = () => {
         setIsPlaying(true);
         window.speechSynthesis.cancel();
         
-        // 優先使用線上發音，失敗則使用系統TTS
         const audioUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`;
         const audio = new Audio(audioUrl);
         audio.onended = () => setIsPlaying(false);
 
         audio.play().catch((e) => {
-            console.warn("Online audio failed, switching to fallback TTS", e);
             try {
                 const utterance = new SpeechSynthesisUtterance(text);
                 utterance.lang = 'en-US';
@@ -368,7 +383,6 @@ const App = () => {
         });
     };
 
-    // Chrome 語音載入 Hack
     React.useEffect(() => {
         const loadVoices = () => { window.speechSynthesis.getVoices(); };
         loadVoices();
@@ -379,22 +393,60 @@ const App = () => {
         startQuiz(wrongAnswers);
     };
 
+    const handleCopy = () => {
+        const text = wrongAnswers.map(w => `${w.en}\t${w.ch}`).join('\n');
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            setCopyStatus(true);
+            setTimeout(() => setCopyStatus(false), 2500);
+        } catch (err) {}
+        document.body.removeChild(textArea);
+    };
+
     // --- Render Start Screen ---
     if (gameState === 'start') {
+        const countOptions = [10, 20, 50, 'all'];
+
         return (
             <div className="bg-white rounded-2xl shadow-xl p-8 text-center max-w-sm mx-auto fade-in">
-                <div className="text-6xl mb-6 text-indigo-500">
+                <div className="text-6xl mb-4 text-indigo-500">
                     <i className="fa-solid fa-graduation-cap"></i>
                 </div>
                 <h1 className="text-3xl font-bold text-gray-800 mb-2">單字特訓班</h1>
-                <p className="text-gray-500 mb-8">
-                    共收錄 {uniqueData.length} 個高頻單字。<br/>準備好接受挑戰了嗎？
+                <p className="text-gray-500 mb-6">
+                    資料庫收錄 {uniqueData.length} 個單字
                 </p>
+
+                {/* 題數選擇器 */}
+                <div className="mb-6">
+                    <p className="text-sm text-gray-400 mb-2 font-bold uppercase tracking-wider">選擇題目數量</p>
+                    <div className="flex justify-center gap-2">
+                        {countOptions.map(opt => (
+                            <button
+                                key={opt}
+                                onClick={() => setTargetCount(opt)}
+                                className={`px-3 py-2 rounded-lg font-bold text-sm transition-all border ${
+                                    targetCount === opt 
+                                    ? 'bg-indigo-500 text-white border-indigo-500 shadow-md transform scale-105' 
+                                    : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300 hover:bg-indigo-50'
+                                }`}
+                            >
+                                {opt === 'all' ? '全部' : opt}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 <button 
                     onClick={() => startQuiz()}
-                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition duration-200 shadow-lg transform hover:-translate-y-1"
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition duration-200 shadow-lg transform hover:-translate-y-1 flex items-center justify-center gap-2"
                 >
-                    開始測驗
+                    <span>開始測驗</span>
+                    <i className="fa-solid fa-arrow-right"></i>
                 </button>
             </div>
         );
@@ -404,14 +456,14 @@ const App = () => {
     if (gameState === 'summary') {
         return (
             <div className="bg-white rounded-2xl shadow-xl p-6 w-full fade-in h-[80vh] flex flex-col">
-                <div className="text-center mb-6">
+                <div className="text-center mb-4">
                     <h2 className="text-2xl font-bold text-gray-800">測驗完成！</h2>
                     <p className="text-gray-500 mt-2">
                         得分：<span className="text-indigo-600 font-bold text-xl">{score}</span> / {quizQueue.length}
                     </p>
                 </div>
 
-                <div className="flex-1 overflow-y-auto mb-6 pr-2">
+                <div className="flex-1 overflow-y-auto mb-4 pr-2">
                     {wrongAnswers.length === 0 ? (
                         <div className="text-center text-green-600 py-10">
                             <i className="fa-solid fa-trophy text-5xl mb-4"></i>
@@ -419,7 +471,10 @@ const App = () => {
                         </div>
                     ) : (
                         <div>
-                            <h3 className="text-red-500 font-bold mb-3 border-b pb-2">需複習的單字 ({wrongAnswers.length})</h3>
+                            <div className="flex justify-between items-center border-b pb-2 mb-3">
+                                <h3 className="text-red-500 font-bold">需複習的單字 ({wrongAnswers.length})</h3>
+                            </div>
+                            
                             <ul className="space-y-3">
                                 {wrongAnswers.map((item, idx) => (
                                     <li key={idx} className="flex justify-between items-center bg-red-50 p-3 rounded-lg">
@@ -435,11 +490,22 @@ const App = () => {
                                     </li>
                                 ))}
                             </ul>
+
+                            <button 
+                                onClick={handleCopy}
+                                className={`w-full mt-4 py-2 px-4 rounded-xl border-2 font-bold transition-all flex items-center justify-center gap-2 ${copyStatus ? 'border-green-500 bg-green-50 text-green-700' : 'border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'}`}
+                            >
+                                {copyStatus ? (
+                                    <><i className="fa-solid fa-check"></i> 已複製！</>
+                                ) : (
+                                    <><i className="fa-regular fa-copy"></i> 一鍵複製錯題清單</>
+                                )}
+                            </button>
                         </div>
                     )}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4 mt-auto">
                     {wrongAnswers.length > 0 && (
                         <button 
                             onClick={retryMissed}
@@ -452,7 +518,7 @@ const App = () => {
                         onClick={() => startQuiz()}
                         className={`bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition shadow ${wrongAnswers.length === 0 ? 'col-span-2' : ''}`}
                     >
-                        全部重測
+                        新測驗
                     </button>
                 </div>
             </div>
@@ -466,7 +532,6 @@ const App = () => {
     return (
         <div className="bg-white rounded-2xl shadow-xl w-full overflow-hidden flex flex-col h-[600px] relative">
             
-            {/* 錯題 Modal */}
             {showMistakes && (
                 <MistakesModal 
                     mistakes={wrongAnswers} 
@@ -475,7 +540,6 @@ const App = () => {
                 />
             )}
 
-            {/* 進度條 */}
             <div className="w-full bg-gray-200 h-2">
                 <div 
                     className="bg-indigo-500 h-2 transition-all duration-300"
@@ -483,7 +547,6 @@ const App = () => {
                 ></div>
             </div>
 
-            {/* 頂部資訊列 */}
             <div className="flex justify-between items-center px-4 py-3 border-b bg-white">
                 <span className="text-gray-500 font-medium text-sm">
                     Q{currentIndex + 1}/{quizQueue.length}
@@ -494,7 +557,6 @@ const App = () => {
                         Score: {score}
                     </span>
                     
-                    {/* 錯題查看按鈕：只有當有錯題時才顯示 */}
                     {wrongAnswers.length > 0 && (
                         <button 
                             onClick={() => setShowMistakes(true)}
@@ -507,7 +569,6 @@ const App = () => {
                 </div>
             </div>
 
-            {/* 主要單字區 */}
             <div className="flex-1 flex flex-col items-center justify-center p-6 bg-slate-50">
                 <div className="text-center w-full">
                     <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-5 break-words fade-in px-2">
@@ -524,7 +585,6 @@ const App = () => {
                 </div>
             </div>
 
-            {/* 選項區 */}
             <div className="p-4 sm:p-6 bg-white space-y-3">
                 {options.map((option, idx) => {
                     let btnClass = "w-full text-left p-3 sm:p-4 rounded-xl border-2 font-medium text-base sm:text-lg transition-all duration-200 transform ";
