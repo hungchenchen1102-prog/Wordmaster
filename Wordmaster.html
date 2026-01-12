@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>單字特訓班 (可選題數版)</title>
+    <title>單字特訓班 (擴充版)</title>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -24,8 +24,9 @@
 
 <script type="text/babel">
 
-// 完整的單字資料庫
+// 完整的單字資料庫 (包含舊單字與新單字)
 const rawData = [
+    // --- 原有單字 ---
     { en: "make up for", ch: "補償；彌補" },
     { en: "give rise to", ch: "導致；引起" },
     { en: "odd", ch: "奇怪的；奇數的；零散的" },
@@ -71,6 +72,685 @@ const rawData = [
     { en: "forceful", ch: "強有力的；有說服力的" },
     { en: "compulsory", ch: "強制的；義務的" },
     { en: "remedy", ch: "治療法；補救" },
+    { en: "propose", ch: "提議；求婚" },
+    { en: "promise", ch: "承諾；前途" },
+    { en: "engage in", ch: "從事；參加" },
+    { en: "pose as", ch: "假裝成..." },
+    { en: "assign to", ch: "指派給..." },
+    { en: "means", ch: "手段；方法" },
+    { en: "house", ch: "給...提供住所；收藏" },
+    { en: "indulge", ch: "沈溺；縱容" },
+    { en: "thrill", ch: "興奮；顫抖" },
+    { en: "protest", ch: "抗議" },
+    { en: "obtain", ch: "獲得" },
+    { en: "intact", ch: "完好無缺的" },
+    { en: "embrace", ch: "擁抱；欣然接受" },
+    { en: "execute", ch: "執行；處決" },
+    { en: "cradle", ch: "搖籃；發源地；輕抱" },
+    { en: "grateful", ch: "感激的" },
+    { en: "quarreled", ch: "爭吵 (過去式)" },
+    { en: "operation", ch: "操作；手術；營運" },
+    { en: "keep pet", ch: "飼養寵物" },
+    { en: "bare", ch: "赤裸的；僅僅的" },
+    { en: "harsh", ch: "嚴厲的；刺耳的" },
+    { en: "confine", ch: "限制；監禁" },
+    { en: "drill", ch: "鑽孔；訓練" },
+    { en: "flush", ch: "沖水；臉紅" },
+    { en: "secure", ch: "安全的；獲得；固定" },
+    { en: "corporation", ch: "大公司；法人" },
+    { en: "immigrate", ch: "移民 (移入)" },
+    { en: "interpret", ch: "解釋；口譯" },
+    { en: "disregarded", ch: "忽視；不理會" },
+    { en: "oral", ch: "口頭的" },
+    { en: "insensitive", ch: "不敏感的；沒感覺的" },
+    { en: "departure", ch: "離開；出發" },
+    { en: "session", ch: "會議；期間；學期" },
+    { en: "infertile", ch: "貧瘠的；不孕的" },
+    { en: "dynamically", ch: "動態地；充滿活力地" },
+    { en: "precisely", ch: "精確地" },
+    { en: "content", ch: "內容；滿足的" },
+    { en: "perishable", ch: "易腐壞的" },
+    { en: "strip", ch: "剝去；條狀物" },
+    { en: "proceed", ch: "繼續進行" },
+    { en: "recede", ch: "後退；衰退" },
+    { en: "recession", ch: "經濟衰退" },
+    { en: "reproduce", ch: "繁殖；複製" },
+    { en: "reduction", ch: "減少；降低" },
+    { en: "come down with", ch: "染上(病)" },
+    { en: "take ... for granted", ch: "視...為理所當然" },
+    { en: "take advantage of", ch: "利用；佔便宜" },
+    { en: "blur", ch: "模糊" },
+    { en: "assume", ch: "假設；承擔(責任)" },
+    { en: "wounded", ch: "受傷的" },
+    { en: "is found in", ch: "被發現於；存在於" },
+    { en: "recreational", ch: "娛樂的；休閒的" },
+    { en: "amuse", ch: "使快樂；逗笑" },
+    { en: "reluctant", ch: "不情願的" },
+    { en: "kidnap", ch: "綁架" },
+    { en: "imply", ch: "暗示" },
+    { en: "summits", ch: "頂峰；高峰會" },
+    { en: "documentary", ch: "紀錄片" },
+    { en: "representative", ch: "代表性的；代表" },
+    { en: "extensive", ch: "廣泛的" },
+    { en: "trauma", ch: "創傷" },
+    { en: "despaired", ch: "絕望 (過去式)" },
+    { en: "penetrated", ch: "穿透；滲透" },
+    { en: "valid", ch: "有效的；有根據的" },
+    { en: "burden", ch: "負擔" },
+    { en: "commend", ch: "稱讚；推薦" },
+    { en: "recommend", ch: "推薦" },
+    { en: "mature", ch: "成熟的" },
+    { en: "quarrel", ch: "爭吵" },
+    { en: "temporary", ch: "暫時的" },
+    { en: "attain", ch: "達到；獲得" },
+    { en: "detain", ch: "拘留；扣押" },
+    { en: "retain", ch: "保留；保持" },
+    { en: "sustain", ch: "維持；支撐" },
+    { en: "neglect", ch: "忽視；疏忽" },
+    { en: "dialect", ch: "方言" },
+    { en: "venture", ch: "冒險；投機活動" },
+    { en: "have a narrow escape", ch: "死裡逃生；千鈞一髮" },
+    { en: "characterize", ch: "描述...的特性" },
+    { en: "sentimental", ch: "多愁善感的" },
+    { en: "roar", ch: "咆哮；吼叫" },
+    { en: "soar", ch: "高飛；翱翔；猛增" },
+    { en: "primitive", ch: "原始的" },
+    { en: "prominent", ch: "顯著的；傑出的" },
+    { en: "novel", ch: "新穎的；小說" },
+    { en: "flesh", ch: "肉；肉體" },
+    { en: "patient", ch: "有耐心的；病人" },
+    { en: "inspect", ch: "檢查；視察" },
+    { en: "prospect", ch: "前景；展望" },
+    { en: "subsist", ch: "生存；維持生活" },
+    { en: "persist", ch: "堅持；持續" },
+    { en: "artisans", ch: "工匠" },
+    { en: "to be prized for sth", ch: "因某事被珍視" },
+    { en: "craze", ch: "狂熱；風行一時" },
+    { en: "assets", ch: "資產" },
+    { en: "a blessing in disguise", ch: "因禍得福" },
+    { en: "two peas in a pod", ch: "一模一樣；極為相似" },
+    { en: "amid", ch: "在...之中" },
+    { en: "pivotal", ch: "關鍵的；中樞的" },
+    { en: "immediacy", ch: "即時性；迫切" },
+    { en: "narrative", ch: "敘事；故事" },
+    { en: "captivate", ch: "使著迷；迷住" },
+    { en: "propel", ch: "推進；驅策" },
+    { en: "unfold", ch: "展開；呈現" },
+    { en: "confront", ch: "面對；對質" },
+    { en: "foster", ch: "促進；培養；收養" },
+    { en: "compelling", ch: "令人信服的；引人入勝的" },
+    { en: "shallow", ch: "淺的；膚淺的" },
+    { en: "be treated to something", ch: "被招待享受..." },
+    { en: "mimic", ch: "模仿" },
+    { en: "eloquent", ch: "雄辯的；有說服力的" },
+    { en: "pessimism", ch: "悲觀主義" },
+    { en: "maintenance", ch: "維護；保養" },
+    { en: "beverage", ch: "飲料" },
+    { en: "implement", ch: "實施；執行；工具" },
+    { en: "contribute", ch: "貢獻；捐助" },
+    { en: "conservation", ch: "保育；保存" },
+    { en: "significant", ch: "重要的；顯著的" },
+    { en: "mean", ch: "卑鄙的；吝嗇的；意指" },
+    { en: "green", ch: "綠色的；環保的；未熟的" },
+    { en: "reserve", ch: "保留；預訂；保護區" },
+    { en: "devote", ch: "奉獻；致力於" },
+    { en: "present", ch: "呈現；出席的；禮物" },
+    { en: "civil", ch: "公民的；文明的；國內的" },
+    { en: "vicious", ch: "惡毒的；兇殘的" },
+    { en: "diverse", ch: "多樣的" },
+    { en: "quote", ch: "引用；報價" },
+    { en: "courteous", ch: "有禮貌的" },
+    { en: "contemporary", ch: "當代的；同時代的" },
+    { en: "accommodate", ch: "容納；提供住宿；適應" },
+    { en: "gradually", ch: "逐漸地" },
+    { en: "vertically", ch: "垂直地" },
+    { en: "graciously", ch: "親切地；優雅地" },
+    { en: "deliberately", ch: "故意地；慎重地" },
+    { en: "may well", ch: "很可能" },
+    { en: "stain", ch: "污漬；弄髒" },
+    { en: "refund", ch: "退款" },
+    { en: "utilize", ch: "利用" },
+    { en: "poetic", ch: "詩意的" },
+    { en: "vague", ch: "模糊的" },
+    { en: "intestine", ch: "腸" },
+    { en: "remark", ch: "評論；談論" },
+    { en: "provoke", ch: "挑釁；激怒；激起" },
+    { en: "overtake", ch: "超車；趕上；突然襲擊" },
+    { en: "compensate", ch: "補償；賠償" },
+    { en: "elaborate", ch: "詳盡闡述；精細的" },
+    { en: "compatible", ch: "相容的；合得來的" },
+    { en: "anonymous", ch: "匿名的" },
+    { en: "detrimental", ch: "有害的" },
+    { en: "be subjected to N", ch: "遭受...；易受...影響" },
+    { en: "engaged", ch: "訂婚的；忙碌的；使用中的" },
+    { en: "mourning", ch: "哀悼" },
+    { en: "go at", ch: "攻擊；努力做" },
+    { en: "by chance", ch: "偶然" },
+    { en: "take up", ch: "開始從事；佔據(時間空間)" },
+    { en: "plain", ch: "樸素的；清楚的；平原" },
+    { en: "decline", ch: "婉拒；下降；衰退" },
+    { en: "embark on", ch: "著手進行；登上(船)" },
+    // --- 新增單字 (已翻譯) ---
+    { en: "Consent", ch: "同意；贊成" },
+    { en: "take a/its/their toll on", ch: "對...造成重大傷害/損失" },
+    { en: "nationality", ch: "國籍" },
+    { en: "currency", ch: "貨幣" },
+    { en: "reputation", ch: "名聲" },
+    { en: "stem from", ch: "源自於" },
+    { en: "eternal", ch: "永恆的" },
+    { en: "esteem", ch: "尊敬；尊重" },
+    { en: "convey", ch: "傳達" },
+    { en: "therapy", ch: "療法；治療" },
+    { en: "be in for sth.", ch: "即將面臨(通常是不愉快的事)" },
+    { en: "noticeable", ch: "顯而易見的；顯著的" },
+    { en: "facility", ch: "設施；場所" },
+    { en: "interaction", ch: "互動" },
+    { en: "sensation", ch: "感覺；轟動" },
+    { en: "endeavor", ch: "努力；力圖" },
+    { en: "rival", ch: "對手；匹敵" },
+    { en: "reception", ch: "接待；接收；歡迎" },
+    { en: "gown", ch: "禮服；長袍" },
+    { en: "autonomy", ch: "自治權；自主" },
+    { en: "to the full", ch: "充分地；盡情地" },
+    { en: "at a price", ch: "付出代價" },
+    { en: "diminish", ch: "減少；減弱" },
+    { en: "bear", ch: "忍受；支撐；生(孩子)" },
+    { en: "wicked", ch: "邪惡的" },
+    { en: "tender", ch: "溫柔的；嫩的" },
+    { en: "substitute", ch: "代用品；替代" },
+    { en: "compassion", ch: "同情；憐憫" },
+    { en: "speculate", ch: "推測；投機" },
+    { en: "stimulate", ch: "刺激；激勵" },
+    { en: "enclose", ch: "隨信附上；圍住" },
+    { en: "voyage", ch: "航行；旅程" },
+    { en: "acquaintance", ch: "泛泛之交；相識的人" },
+    { en: "nonetheless", ch: "儘管如此" },
+    { en: "apparent", ch: "明顯的；表面的" },
+    { en: "unconventional", ch: "非傳統的" },
+    { en: "document", ch: "文件；紀錄" },
+    { en: "pest", ch: "害蟲" },
+    { en: "strive", ch: "努力；奮鬥" },
+    { en: "swap", ch: "交換" },
+    { en: "versatile", ch: "多功能的；多才多藝的" },
+    { en: "on the horizon", ch: "即將發生；在地平線上" },
+    { en: "lean", ch: "傾斜；倚靠；瘦的" },
+    { en: "elegant", ch: "優雅的" },
+    { en: "twist", ch: "扭轉；意外轉折" },
+    { en: "fad", ch: "一時的流行" },
+    { en: "pulse", ch: "脈搏" },
+    { en: "emphasis", ch: "強調" },
+    { en: "Consistent", ch: "一致的；始終如一的" },
+    { en: "exceedingly", ch: "極其；非常" },
+    { en: "flexible", ch: "彈性的；靈活的" },
+    { en: "fatigue", ch: "疲勞" },
+    { en: "capsule", ch: "膠囊；太空艙" },
+    { en: "insert", ch: "插入" },
+    { en: "external", ch: "外部的" },
+    { en: "fetch", ch: "拿來；售得" },
+    { en: "prospect", ch: "前景；指望" },
+    { en: "mend", ch: "修理；修補" },
+    { en: "heel", ch: "腳後跟" },
+    { en: "deceive", ch: "欺騙" },
+    { en: "naively", ch: "天真地" },
+    { en: "compromise", ch: "妥協；危害" },
+    { en: "tragic", ch: "悲劇的" },
+    { en: "companion", ch: "同伴" },
+    { en: "singular", ch: "單數的；非凡的" },
+    { en: "wrapping", ch: "包裝紙" },
+    { en: "spill", ch: "灑出" },
+    { en: "dependable", ch: "可靠的" },
+    { en: "deadly", ch: "致命的" },
+    { en: "immortal", ch: "不朽的；長生不老的" },
+    { en: "flaw", ch: "缺陷；瑕疵" },
+    { en: "intrigue", ch: "引起好奇；密謀" },
+    { en: "tempting", ch: "誘人的" },
+    { en: "conscious", ch: "有意識的" },
+    { en: "resolve", ch: "解決；下決心" },
+    { en: "bulk up", ch: "增壯；變大" },
+    { en: "soreness", ch: "痠痛；悲傷" },
+    { en: "otherwise", ch: "否則；不然" },
+    { en: "squat", ch: "蹲；深蹲" },
+    { en: "indication", ch: "指示；跡象" },
+    { en: "scale", ch: "規模；鱗片；秤" },
+    { en: "disorder", ch: "混亂；失調；疾病" },
+    { en: "robust", ch: "強健的" },
+    { en: "susceptible", ch: "易受影響的" },
+    { en: "diagnose", ch: "診斷" },
+    { en: "cripple", ch: "使殘廢；嚴重削弱" },
+    { en: "Intensify", ch: "加劇；增強" },
+    { en: "induce", ch: "引起；導致；誘導" },
+    { en: "thrive", ch: "繁榮；茁壯成長" },
+    { en: "treaty", ch: "條約" },
+    { en: "epidemic", ch: "傳染病；流行病" },
+    { en: "marine", ch: "海洋的" },
+    { en: "particle", ch: "微粒；粒子" },
+    { en: "innumerable", ch: "無數的" },
+    { en: "restrict", ch: "限制" },
+    { en: "disposal", ch: "處理；處置" },
+    { en: "immense", ch: "巨大的" },
+    { en: "resume", ch: "恢復；重新開始" },
+    { en: "excel", ch: "擅長；勝過" },
+    { en: "perceive", ch: "察覺；感知；理解" },
+    { en: "cognitive", ch: "認知的" },
+    { en: "likelihood", ch: "可能性" },
+    { en: "stroke", ch: "中風；撫摸；筆觸" },
+    { en: "split", ch: "分裂；分開" },
+    { en: "verbal", ch: "口頭的；言語的" },
+    { en: "interference", ch: "干擾；干涉" },
+    { en: "curriculum", ch: "課程" },
+    { en: "instruct", ch: "指示；教導" },
+    { en: "despair", ch: "絕望" },
+    { en: "extinct", ch: "滅絕的" },
+    { en: "adverse", ch: "不利的；有害的" },
+    { en: "dismiss", ch: "解散；駁回；解僱" },
+    { en: "prohibit", ch: "禁止" },
+    { en: "solid", ch: "固體的；堅固的" },
+    { en: "intuition", ch: "直覺" },
+    { en: "criticism", ch: "批評" },
+    { en: "revise", ch: "修改；修訂" },
+    { en: "arise", ch: "出現；發生" },
+    { en: "spectacular", ch: "壯觀的" },
+    { en: "conservative", ch: "保守的" },
+    { en: "portion", ch: "部分；一份" },
+    { en: "accusation", ch: "指控" },
+    { en: "to spice sth. up", ch: "為...增添趣味" },
+    { en: "to scale sth. up", ch: "擴大...的規模" },
+    { en: "to wipe sth. out", ch: "徹底消滅/摧毀" },
+    { en: "contaminate", ch: "污染" },
+    { en: "sophisticated", ch: "複雜的；精密的" }
+];
+
+const shuffleArray = (array) => {
+    let newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+};
+
+// 使用 Map 自動除重，保留最新的 (如果需要)
+const uniqueData = Array.from(new Map(rawData.map(item => [item.en, item])).values());
+
+// 錯題列表 Modal 組件
+const MistakesModal = ({ mistakes, onClose, onSpeak }) => {
+    return (
+        <div className="absolute inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black bg-opacity-50" onClick={onClose}></div>
+            <div className="bg-white rounded-2xl shadow-2xl w-full max-w-sm max-h-[80vh] flex flex-col relative z-10 modal-enter-active">
+                <div className="p-4 border-b flex justify-between items-center bg-red-50 rounded-t-2xl">
+                    <h3 className="font-bold text-red-600">目前錯題 ({mistakes.length})</h3>
+                    <button onClick={onClose} className="text-gray-500 hover:text-gray-700 w-8 h-8 flex items-center justify-center rounded-full hover:bg-red-100">
+                        <i className="fa-solid fa-xmark"></i>
+                    </button>
+                </div>
+                <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                    {mistakes.map((item, idx) => (
+                        <div key={idx} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg border border-gray-100">
+                            <div>
+                                <div className="font-bold text-gray-800 flex items-center gap-2">
+                                    {item.en}
+                                    <button onClick={() => onSpeak(item.en)} className="text-gray-400 hover:text-indigo-600 w-6 h-6 flex items-center justify-center rounded-full hover:bg-white transition">
+                                        <i className="fa-solid fa-volume-high text-xs"></i>
+                                    </button>
+                                </div>
+                                <div className="text-sm text-gray-600">{item.ch}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+                <div className="p-4 border-t text-center bg-gray-50 rounded-b-2xl">
+                    <button onClick={onClose} className="text-indigo-600 font-bold text-sm hover:underline">
+                        關閉並繼續測驗
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+const App = () => {
+    const [gameState, setGameState] = React.useState('start'); 
+    const [quizQueue, setQuizQueue] = React.useState([]);
+    const [currentIndex, setCurrentIndex] = React.useState(0);
+    const [score, setScore] = React.useState(0);
+    const [wrongAnswers, setWrongAnswers] = React.useState([]);
+    const [options, setOptions] = React.useState([]);
+    const [selectedOption, setSelectedOption] = React.useState(null); 
+    const [userChoice, setUserChoice] = React.useState(null);
+    const [isPlaying, setIsPlaying] = React.useState(false);
+    const [showMistakes, setShowMistakes] = React.useState(false);
+    const [copyStatus, setCopyStatus] = React.useState(false);
+    const [targetCount, setTargetCount] = React.useState(20);
+
+    const startQuiz = (specificList = null) => {
+        let finalQueue = [];
+        
+        if (specificList) {
+            finalQueue = shuffleArray(specificList);
+        } else {
+            const shuffled = shuffleArray(uniqueData);
+            if (targetCount === 'all') {
+                finalQueue = shuffled;
+            } else {
+                finalQueue = shuffled.slice(0, parseInt(targetCount));
+            }
+        }
+
+        setQuizQueue(finalQueue);
+        setCurrentIndex(0);
+        setScore(0);
+        setWrongAnswers([]);
+        setGameState('quiz');
+        generateOptions(finalQueue[0], uniqueData);
+        setSelectedOption(null);
+        setUserChoice(null);
+        setShowMistakes(false);
+        setCopyStatus(false);
+    };
+
+    const generateOptions = (currentWord, fullList) => {
+        const otherWords = fullList.filter(w => w.en !== currentWord.en);
+        const distractors = shuffleArray(otherWords).slice(0, 3);
+        const allOptions = shuffleArray([currentWord, ...distractors]);
+        setOptions(allOptions);
+    };
+
+    const handleAnswer = (option) => {
+        if (selectedOption) return;
+
+        setUserChoice(option.en);
+        const currentWord = quizQueue[currentIndex];
+        const isCorrect = option.en === currentWord.en;
+
+        if (isCorrect) {
+            setScore(prev => prev + 1);
+            setSelectedOption('correct');
+        } else {
+            setWrongAnswers(prev => [...prev, currentWord]);
+            setSelectedOption('wrong');
+        }
+
+        setTimeout(() => {
+            if (currentIndex + 1 < quizQueue.length) {
+                const nextIndex = currentIndex + 1;
+                setCurrentIndex(nextIndex);
+                generateOptions(quizQueue[nextIndex], uniqueData);
+                setSelectedOption(null);
+                setUserChoice(null);
+            } else {
+                setGameState('summary');
+            }
+        }, 1200);
+    };
+
+    const speak = (text) => {
+        setIsPlaying(true);
+        window.speechSynthesis.cancel();
+        
+        const audioUrl = `https://dict.youdao.com/dictvoice?audio=${encodeURIComponent(text)}&type=2`;
+        const audio = new Audio(audioUrl);
+        audio.onended = () => setIsPlaying(false);
+
+        audio.play().catch((e) => {
+            try {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.8;
+                utterance.onend = () => setIsPlaying(false);
+                utterance.onerror = () => setIsPlaying(false);
+                const voices = window.speechSynthesis.getVoices();
+                const enVoice = voices.find(v => v.lang === 'en-US' && v.name.includes('Google')) || voices.find(v => v.lang === 'en-US');
+                if (enVoice) utterance.voice = enVoice;
+                window.speechSynthesis.speak(utterance);
+            } catch (ttsError) {
+                setIsPlaying(false);
+            }
+        });
+    };
+
+    React.useEffect(() => {
+        const loadVoices = () => { window.speechSynthesis.getVoices(); };
+        loadVoices();
+        window.speechSynthesis.onvoiceschanged = loadVoices;
+    }, []);
+
+    const retryMissed = () => {
+        startQuiz(wrongAnswers);
+    };
+
+    const handleCopy = () => {
+        const text = wrongAnswers.map(w => `${w.en}\t${w.ch}`).join('\n');
+        const textArea = document.createElement("textarea");
+        textArea.value = text;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+            document.execCommand('copy');
+            setCopyStatus(true);
+            setTimeout(() => setCopyStatus(false), 2500);
+        } catch (err) {}
+        document.body.removeChild(textArea);
+    };
+
+    // --- Render Start Screen ---
+    if (gameState === 'start') {
+        const countOptions = [10, 20, 50, 'all'];
+
+        return (
+            <div className="bg-white rounded-2xl shadow-xl p-8 text-center max-w-sm mx-auto fade-in">
+                <div className="text-6xl mb-4 text-indigo-500">
+                    <i className="fa-solid fa-graduation-cap"></i>
+                </div>
+                <h1 className="text-3xl font-bold text-gray-800 mb-2">單字特訓班</h1>
+                <p className="text-gray-500 mb-6">
+                    資料庫收錄 {uniqueData.length} 個單字
+                </p>
+
+                <div className="mb-6">
+                    <p className="text-sm text-gray-400 mb-2 font-bold uppercase tracking-wider">選擇題目數量</p>
+                    <div className="flex justify-center gap-2">
+                        {countOptions.map(opt => (
+                            <button
+                                key={opt}
+                                onClick={() => setTargetCount(opt)}
+                                className={`px-3 py-2 rounded-lg font-bold text-sm transition-all border ${
+                                    targetCount === opt 
+                                    ? 'bg-indigo-500 text-white border-indigo-500 shadow-md transform scale-105' 
+                                    : 'bg-white text-gray-600 border-gray-200 hover:border-indigo-300 hover:bg-indigo-50'
+                                }`}
+                            >
+                                {opt === 'all' ? '全部' : opt}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
+                <button 
+                    onClick={() => startQuiz()}
+                    className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 px-6 rounded-xl transition duration-200 shadow-lg transform hover:-translate-y-1 flex items-center justify-center gap-2"
+                >
+                    <span>開始測驗</span>
+                    <i className="fa-solid fa-arrow-right"></i>
+                </button>
+            </div>
+        );
+    }
+
+    // --- Render Summary Screen ---
+    if (gameState === 'summary') {
+        return (
+            <div className="bg-white rounded-2xl shadow-xl p-6 w-full fade-in h-[80vh] flex flex-col">
+                <div className="text-center mb-4">
+                    <h2 className="text-2xl font-bold text-gray-800">測驗完成！</h2>
+                    <p className="text-gray-500 mt-2">
+                        得分：<span className="text-indigo-600 font-bold text-xl">{score}</span> / {quizQueue.length}
+                    </p>
+                </div>
+
+                <div className="flex-1 overflow-y-auto mb-4 pr-2">
+                    {wrongAnswers.length === 0 ? (
+                        <div className="text-center text-green-600 py-10">
+                            <i className="fa-solid fa-trophy text-5xl mb-4"></i>
+                            <p className="font-bold">太強了！全部答對！</p>
+                        </div>
+                    ) : (
+                        <div>
+                            <div className="flex justify-between items-center border-b pb-2 mb-3">
+                                <h3 className="text-red-500 font-bold">需複習的單字 ({wrongAnswers.length})</h3>
+                            </div>
+                            
+                            <ul className="space-y-3">
+                                {wrongAnswers.map((item, idx) => (
+                                    <li key={idx} className="flex justify-between items-center bg-red-50 p-3 rounded-lg">
+                                        <div>
+                                            <div className="font-bold text-gray-800 flex items-center gap-2">
+                                                {item.en}
+                                                <button onClick={() => speak(item.en)} className="text-gray-400 hover:text-indigo-600 text-sm w-8 h-8 flex items-center justify-center rounded-full hover:bg-white transition">
+                                                    <i className="fa-solid fa-volume-high"></i>
+                                                </button>
+                                            </div>
+                                            <div className="text-sm text-gray-600">{item.ch}</div>
+                                        </div>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <button 
+                                onClick={handleCopy}
+                                className={`w-full mt-4 py-2 px-4 rounded-xl border-2 font-bold transition-all flex items-center justify-center gap-2 ${copyStatus ? 'border-green-500 bg-green-50 text-green-700' : 'border-gray-200 text-gray-600 hover:bg-gray-50 hover:border-gray-300'}`}
+                            >
+                                {copyStatus ? (
+                                    <><i className="fa-solid fa-check"></i> 已複製！</>
+                                ) : (
+                                    <><i className="fa-regular fa-copy"></i> 一鍵複製錯題清單</>
+                                )}
+                            </button>
+                        </div>
+                    )}
+                </div>
+
+                <div className="grid grid-cols-2 gap-4 mt-auto">
+                    {wrongAnswers.length > 0 && (
+                        <button 
+                            onClick={retryMissed}
+                            className="bg-orange-500 hover:bg-orange-600 text-white font-bold py-3 px-4 rounded-xl transition shadow"
+                        >
+                            複習錯題
+                        </button>
+                    )}
+                    <button 
+                        onClick={() => startQuiz()}
+                        className={`bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-xl transition shadow ${wrongAnswers.length === 0 ? 'col-span-2' : ''}`}
+                    >
+                        新測驗
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
+    // --- Render Quiz Screen ---
+    const currentWord = quizQueue[currentIndex];
+    const progress = Math.round(((currentIndex) / quizQueue.length) * 100);
+
+    return (
+        <div className="bg-white rounded-2xl shadow-xl w-full overflow-hidden flex flex-col h-[600px] relative">
+            
+            {showMistakes && (
+                <MistakesModal 
+                    mistakes={wrongAnswers} 
+                    onClose={() => setShowMistakes(false)} 
+                    onSpeak={speak} 
+                />
+            )}
+
+            <div className="w-full bg-gray-200 h-2">
+                <div 
+                    className="bg-indigo-500 h-2 transition-all duration-300"
+                    style={{ width: `${progress}%` }}
+                ></div>
+            </div>
+
+            <div className="flex justify-between items-center px-4 py-3 border-b bg-white">
+                <span className="text-gray-500 font-medium text-sm">
+                    Q{currentIndex + 1}/{quizQueue.length}
+                </span>
+                
+                <div className="flex items-center gap-2">
+                    <span className="bg-indigo-50 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold border border-indigo-100">
+                        Score: {score}
+                    </span>
+                    
+                    {wrongAnswers.length > 0 && (
+                        <button 
+                            onClick={() => setShowMistakes(true)}
+                            className="bg-red-100 text-red-600 px-3 py-1 rounded-full text-xs font-bold border border-red-200 hover:bg-red-200 transition flex items-center gap-1 animate-pulse"
+                        >
+                            <i className="fa-solid fa-triangle-exclamation"></i>
+                            Errors: {wrongAnswers.length}
+                        </button>
+                    )}
+                </div>
+            </div>
+
+            <div className="flex-1 flex flex-col items-center justify-center p-6 bg-slate-50">
+                <div className="text-center w-full">
+                    <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-5 break-words fade-in px-2">
+                        {currentWord.en}
+                    </h2>
+                    <button 
+                        onClick={() => speak(currentWord.en)}
+                        disabled={isPlaying}
+                        className={`w-14 h-14 rounded-full shadow-md text-xl flex items-center justify-center mx-auto transition-all ${isPlaying ? 'bg-indigo-500 text-white scale-110' : 'bg-white text-indigo-500 hover:bg-indigo-500 hover:text-white'}`}
+                    >
+                        {isPlaying ? <i className="fa-solid fa-volume-high animate-pulse"></i> : <i className="fa-solid fa-volume-high"></i>}
+                    </button>
+                    <p className="text-xs text-gray-400 mt-2">點擊發音</p>
+                </div>
+            </div>
+
+            <div className="p-4 sm:p-6 bg-white space-y-3">
+                {options.map((option, idx) => {
+                    let btnClass = "w-full text-left p-3 sm:p-4 rounded-xl border-2 font-medium text-base sm:text-lg transition-all duration-200 transform ";
+                    
+                    if (selectedOption) {
+                        if (option.en === currentWord.en) {
+                            btnClass += "border-green-500 bg-green-50 text-green-700";
+                        } else if (option.en === userChoice) {
+                            btnClass += "border-red-500 bg-red-50 text-red-700";
+                        } else {
+                            btnClass += "border-gray-100 text-gray-300";
+                        }
+                    } else {
+                        btnClass += "border-gray-200 text-gray-700 hover:border-indigo-500 hover:bg-indigo-50 hover:shadow-md active:scale-[0.99] cursor-pointer";
+                    }
+
+                    return (
+                        <button 
+                            key={idx} 
+                            onClick={() => handleAnswer(option)}
+                            disabled={!!selectedOption}
+                            className={btnClass}
+                        >
+                            <span className="mr-3 text-gray-400 text-sm font-bold">{String.fromCharCode(65 + idx)}.</span>
+                            {option.ch}
+                            {selectedOption && option.en === currentWord.en && <i className="fa-solid fa-check float-right mt-1"></i>}
+                            {selectedOption && option.en === userChoice && option.en !== currentWord.en && <i className="fa-solid fa-xmark float-right mt-1"></i>}
+                        </button>
+                    );
+                })}
+            </div>
+        </div>
+    );
+};
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>
+
     { en: "propose", ch: "提議；求婚" },
     { en: "promise", ch: "承諾；前途" },
     { en: "engage in", ch: "從事；參加" },
